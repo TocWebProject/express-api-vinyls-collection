@@ -1,0 +1,197 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "My vinyls collection",
+        "description": "My vinyls collection Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Vinyl",
+            "description": "API for users in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/vinyls": {
+            "get": {
+                "tags": [
+                    "Vinyl"
+                ],
+                "summary": "Get all my vinyls collection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Vinyls"
+                        }
+                    }
+                }
+            }
+        },
+        "/vinyls/create/": {
+            "post": {
+                "tags": [
+                    "Vinyl"
+                ],
+                "summary": "Create one vinyl",
+                "parameters": [
+                    {
+                        "name": "vinyl",
+                        "in": "body",
+                        "description": "Vinyl we want to create",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "artiste": {
+                                    "type": "string"
+                                },
+                                "album": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "date_de_sortie": {
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Vinyls"
+                        }
+                    }
+                }
+            }
+        },
+        "/vinyls/update/{id}": {
+            "put": {
+                "tags": [
+                    "Vinyl"
+                ],
+                "summary": "Update one vinyl with this id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Vinyl we want to update",
+                        "schema": {
+                            "id": {
+                                "type": "interger",
+                                "uniqueItems": true
+                            }
+                        }
+                    },
+                    {
+                        "name": "vinyl",
+                        "in": "body",
+                        "description": "Vinyl we want to update",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "artiste": {
+                                    "type": "string"
+                                },
+                                "album": {
+                                    "type": "string"
+                                },
+                                "label": {
+                                    "type": "string"
+                                },
+                                "date_de_sortie": {
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Vinyls"
+                        }
+                    }
+                }
+            }
+        }
+        ,
+        "/vinyls/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Vinyl"
+                ],
+                "summary": "Delete one vinyl with this id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Vinyl we want to delete",
+                        "schema": {
+                            "$ref": "#/definitions/Vinyls"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Vinyls"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Vinyls": {
+            "required": [
+                "id",
+                "artiste",
+                "album",
+                "label",
+                "date_de_sortie"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "artiste": {
+                    "type": "string"
+                },
+                "album": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "date_de_sortie": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        }
+    }
+}
