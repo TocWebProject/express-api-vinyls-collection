@@ -1,11 +1,16 @@
-// routes/router.js
 const express = require('express');
 const router = express.Router();
 
 const connection = require('../db/db.js');
 
-router.get('/vinyls', async (request, response) => {
-    connection.query('SELECT * FROM vinyl;', function (error, results) {
+router.get('/vinyl/get/:id([0-9]+)', async (request, response) => {
+
+    const fk_id_user = parseInt(request.params.id);
+
+    const sql = 'SELECT * FROM vinyl WHERE fk_id_user = ? ;';
+
+
+    connection.query(sql, fk_id_user, function (error, results) {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
@@ -15,72 +20,68 @@ router.get('/vinyls', async (request, response) => {
     });
 });
 
-router.post('/vinyls/create', async (request, response) => {
-    const artiste = request.body.artiste;
+
+router.post('/vinyl/create', async (request, response) => {
+    const fk_id_user = request.body.fk_id_user;
+    const artist = request.body.artist;
     const album = request.body.album;
     const label = request.body.label;
-    const date_de_sortie = request.body.date_de_sortie;
+    const release_date = request.body.release_date;
 
-    let sql = 'INSERT INTO vinyl (artiste, album, label, date_de_sortie) VALUES (?, ? , ?, ?);'
-    connection.query(sql, [
-            artiste, 
-            album, 
-            label, 
-            date_de_sortie
-        ], function (error, rows) {
+    let sql = 'INSERT INTO vinyl (fk_id_user, artist, album, label, release_date) VALUES (?, ?, ? , ?, ?);'
+    connection.query(sql, [fk_id_user, artist, album, label, release_date], function (error, rows) {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
             response.status(201).json({
-                message: 'Vinyl from ' + artiste + ' create successfully!'
+                message: '' + artist + ' Vinyl from user ' + fk_id_user + ' create successfully !'
             });
         }
     });
 });
 
-router.put('/vinyls/update/:id([0-9]+)', async (request, response) => {
+router.put('/vinyl/update/:id([0-9]+)', async (request, response) => {
     const vinyl_id = parseInt(request.params.id);
-    const artiste = request.body.artiste;
+    const fk_id_user = request.body.fk_id_user;
+    const artist = request.body.artist;
     const album = request.body.album;
     const label = request.body.label;
-    const date_de_sortie = request.body.date_de_sortie
-    // const sql = 'UPDATE vinyl SET artiste = ?, album = ?, label = ?, date_de_sortie = ? WHERE id = "' + vinyl_id + '";';
-    const sql = 'UPDATE vinyl SET artiste = ?, album = ?, label = ?, date_de_sortie = ? WHERE id = ?;';
+    const release_date = request.body.release_date
+    const sql = 'UPDATE vinyl SET artist = ?, album = ?, label = ?, release_date = ? WHERE id = ? AND fk_id_user = ? ;'
 
-
-    const body = [artiste, album, label, date_de_sortie, vinyl_id];
+    const body = [artist, album, label, release_date, vinyl_id, fk_id_user];
     connection.query(sql, body, function (error, results) {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
-            console.log('Vinyl ' + vinyl_id + ' mis à jour');
+            console.log('Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' updated successfully');
             response.status(201).json({
-                message: 'Vinyl ' + vinyl_id + ' updated successfully!'
+                message: 'Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' updated successfully!'
             });
         }
     });
 })
 
-router.delete('/vinyls/delete/:id([0-9]+)', async (request, response) => {
+router.delete('/vinyl/delete/:id([0-9]+)', async (request, response) => {
     const vinyl_id = parseInt(request.params.id);
-    const sql = 'DELETE FROM vinyl WHERE id = ?;';
+    const fk_id_user = request.body.fk_id_user;
 
-    connection.query(sql, [vinyl_id], function (error, rows) {
+    const sql = 'DELETE FROM vinyl WHERE id = ? AND fk_id_user = ?;';
+
+    connection.query(sql, [vinyl_id, fk_id_user], function (error, rows) {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
-            console.log(rows.affectedRows + " record(s) updated");
-            console.log('Vinyl ' + vinyl_id + ' supprimé');
-
+            console.log('Vinyl ' + vinyl_id + ' deleted successfully');
             response.status(201).json({
-                message: 'Vinyl ' + vinyl_id + ' deleted successfully!'
+                message: 'Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' deleted successfully!'
             });
         }
     });
 });
 
 router.get('*', (request, response) => {
-    response.status(500).json({ message: "Aucune donnée disponible à cette adresse" })
+    response.status(500).json({ message: "No data at this adress" })
 });
 
 module.exports = router;
