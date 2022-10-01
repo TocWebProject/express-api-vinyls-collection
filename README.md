@@ -35,17 +35,17 @@ http://localhost:3000/api-docs/
 
 ## Routes CRUD Methods  
 
-#### Ensemble de la collection - Method GET 
-http://localhost:3000/vinyls/
+#### Ensemble de la collection d'un user - Method GET avec l'id de l'user
+http://localhost:3000/vinyl/{id}
 
-#### Créer un vinyl - Method POST avec body params
-http://localhost:3000/vinyls/create/
+#### Ajouter un vinyl d'un user - Method POST avec body params
+http://localhost:3000/vinyl/create/
 
-#### Créer un vinyl - Method PUT avec body params et id dans le path
-http://localhost:3000/vinyls/create/
+#### Update d'un vinyl d'un user - Method PUT avec body params et id du vinyl dans le path
+http://localhost:3000/vinyl/put/{id}
 
-#### Suppresion d'un vinyl de la collection - Method DELETE avec id dans le path
-http://localhost:3000/vinyls/delete/id
+#### Suppresion d'un vinyl d'un user - Method DELETE avec body params  et avec id du vinyl dans le path dans le path
+http://localhost:3000/vinyl/delete/{id}
 
 
 ## Depedencies

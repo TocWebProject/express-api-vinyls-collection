@@ -27,28 +27,41 @@
         "application/json"
     ],
     "paths": {
-        "/vinyls": {
+        "/vinyl/get/{id}": {
             "get": {
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Get all my vinyls collection",
+                "summary": "Get all vinyls from the user",
+                "parameters": [
+                      {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User Id",
+                        "schema": {
+                            "id": {
+                                "type": "number",
+                                "uniqueItems": true
+                            }
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Vinyls"
+                            "$ref": "#/definitions/Vinyl"
                         }
                     }
                 }
             }
         },
-        "/vinyls/create/": {
+        "/vinyl/create/": {
             "post": {
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Create one vinyl",
+                "summary": "Adding one vinyl from the user",
                 "parameters": [
                     {
                         "name": "vinyl",
@@ -57,7 +70,10 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "artiste": {
+                                "fk_id_user" : {
+                                    "type" : "number"
+                                 },
+                                "artist": {
                                     "type": "string"
                                 },
                                 "album": {
@@ -66,7 +82,7 @@
                                 "label": {
                                     "type": "string"
                                 },
-                                "date_de_sortie": {
+                                "release_date": {
                                     "type": "string",
                                     "format": "date"
                                 }
@@ -78,18 +94,18 @@
                     "201": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Vinyls"
+                            "$ref": "#/definitions/Vinyl"
                         }
                     }
                 }
             }
         },
-        "/vinyls/update/{id}": {
+        "/vinyl/update/{id}": {
             "put": {
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Update one vinyl with this id",
+                "summary": "Update one vinyl with this id in path & fk_id_user in body",
                 "parameters": [
                     {
                         "name": "id",
@@ -97,7 +113,7 @@
                         "description": "Vinyl we want to update",
                         "schema": {
                             "id": {
-                                "type": "interger",
+                                "type": "number",
                                 "uniqueItems": true
                             }
                         }
@@ -109,7 +125,10 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "artiste": {
+                                "fk_id_user" : {
+                                    "type" : "number"
+                                 },
+                                "artist": {
                                     "type": "string"
                                 },
                                 "album": {
@@ -118,7 +137,7 @@
                                 "label": {
                                     "type": "string"
                                 },
-                                "date_de_sortie": {
+                                "release_date": {
                                     "type": "string",
                                     "format": "date"
                                 }
@@ -130,34 +149,55 @@
                     "201": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Vinyls"
+                            "$ref": "#/definitions/Vinyl"
                         }
                     }
                 }
             }
         }
         ,
-        "/vinyls/delete/{id}": {
+        "/vinyl/delete/{id}": {
             "delete": {
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Delete one vinyl with this id",
+                "summary": "Delete one vinyl with this id in the path and fk_id_user in body",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "description": "Vinyl we want to delete",
                         "schema": {
-                            "$ref": "#/definitions/Vinyls"
+                            "$ref": "#/definitions/Vinyl"
+                        }
+                    },
+                    {
+                        "name": "fk_id_user",
+                        "in": "body",
+                        "description": "The foreign key id fom the user",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "fk_id_user" : {
+                                    "type" : "number"
+                                 }
+                            }
                         }
                     }
                 ],
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "fk_id_user" : {
+                            "type" : "int"
+                         }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Vinyls"
+                            "$ref": "#/definitions/Vinyl"
                         }
                     }
                 }
@@ -165,20 +205,25 @@
         }
     },
     "definitions": {
-        "Vinyls": {
+        "Vinyl": {
             "required": [
                 "id",
-                "artiste",
+                "fk_id_user",
+                "artist",
                 "album",
                 "label",
-                "date_de_sortie"
+                "release_date"
             ],
             "properties": {
                 "id": {
                     "type": "integer",
                     "uniqueItems": true
                 },
-                "artiste": {
+                "fk_id_user": { 
+                    "type" : "integer",
+                    "uniqueItems" : true
+                },
+                "artist": {
                     "type": "string"
                 },
                 "album": {
@@ -187,7 +232,7 @@
                 "label": {
                     "type": "string"
                 },
-                "date_de_sortie": {
+                "release_date": {
                     "type": "string",
                     "format": "date"
                 }
