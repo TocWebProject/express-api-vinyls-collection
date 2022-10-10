@@ -29,23 +29,34 @@ npm run start
 ```
 
 
-## Swagger Documentation 
+## Documentation détaillé de l'api via Swagger avec description des paramètres pour chaque route
 http://localhost:3000/api-docs/
 
 
-## Routes CRUD Methods  
+## Routes Vinyles
 
-#### Ensemble de la collection d'un user - Method GET avec l'id de l'user
+#### Ensemble de la collection d'un user - Method GET 
 http://localhost:3000/vinyl/{id}
 
-#### Ajouter un vinyl d'un user - Method POST avec body params
+#### Ajouter un vinyl d'un user - Method POST 
 http://localhost:3000/vinyl/create/
 
-#### Update d'un vinyl d'un user - Method PUT avec body params et id du vinyl dans le path
+#### Update d'un vinyl d'un user - Method PUT 
 http://localhost:3000/vinyl/put/{id}
 
-#### Suppresion d'un vinyl d'un user - Method DELETE avec body params  et avec id du vinyl dans le path dans le path
+#### Suppresion d'un vinyl d'un user - Method DELETE 
 http://localhost:3000/vinyl/delete/{id}
+
+## Routes Login / Register
+
+#### Enregistrement d'un utilisateur - Method POST 
+http://localhost:3000/sign-up 
+
+#### Connexion d'un utilisateur - Method POST 
+http://localhost:3000/login
+
+
+
 
 
 ## Depedencies
@@ -56,3 +67,5 @@ http://localhost:3000/vinyl/delete/{id}
 #### helmet 
 #### dotenv
 #### swagger-ui-express
+#### jsonwebtoken
+#### bcryptjs

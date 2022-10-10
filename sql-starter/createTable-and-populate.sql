@@ -4,7 +4,7 @@ CREATE TABLE users
     username VARCHAR(100) NOT NULL,
     secret_password VARCHAR(255) NOT NULL,
     registered DATE NOT NULL,
-    last_login DATE NOT NULL
+    last_login DATE 
 );
 
 CREATE TABLE vinyl

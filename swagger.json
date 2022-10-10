@@ -27,6 +27,77 @@
         "application/json"
     ],
     "paths": {
+        "/sign-up": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Adding one user",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "The user we want to create",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username" : {
+                                    "type" : "string"
+                                 },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "repeat_password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login an User and return informations",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "description": "The user we want to login",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username" : {
+                                    "type" : "string"
+                                 },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
         "/vinyl/get/{id}": {
             "get": {
                 "tags": [
@@ -237,6 +308,37 @@
                     "format": "date"
                 }
             }
+        },
+        "Users": {
+            "required": [
+                "id",
+                "username",
+                "secret_password",
+                "registered",
+                "last_login"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "username": { 
+                    "type" : "string",
+                    "uniqueItems" : true
+                },
+                "secret_password": {
+                    "type": "string"
+                },
+                "registered": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "last_login": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
         }
+
     }
 }
