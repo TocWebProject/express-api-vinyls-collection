@@ -41,9 +41,9 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "username" : {
-                                    "type" : "string"
-                                 },
+                                "username": {
+                                    "type": "string"
+                                },
                                 "password": {
                                     "type": "string"
                                 },
@@ -56,10 +56,19 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Users"
-                        }
+                        "description": "User registered successfully"
+                    },
+                    "409": {
+                        "description": "This username is already in use !"
+                    },
+                    "400": {
+                        "description": "Something went wrong with the database operation"
+                    },
+                    "401": {
+                        "description": "Username or password is incorrect!"
+                    },
+                    "500": {
+                        "description": "Username available but something is wrong !"
                     }
                 }
             }
@@ -78,9 +87,9 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "username" : {
-                                    "type" : "string"
-                                 },
+                                "username": {
+                                    "type": "string"
+                                },
                                 "password": {
                                     "type": "string"
                                 }
@@ -89,11 +98,14 @@
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Users"
-                        }
+                    "200": {
+                        "description": "Logged in"
+                    },
+                    "400": {
+                        "description": "Error with database"
+                    },
+                    "401": {
+                        "description": "Username or password is incorrect !"
                     }
                 }
             }
@@ -105,7 +117,7 @@
                 ],
                 "summary": "Get all vinyls from the user",
                 "parameters": [
-                      {
+                    {
                         "name": "id",
                         "in": "path",
                         "description": "User Id",
@@ -119,10 +131,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Vinyl"
-                        }
+                        "description": "All vinyls from the user"
+                    },
+                    "400": {
+                        "description": "Error in database operation"
                     }
                 }
             }
@@ -141,9 +153,9 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "fk_id_user" : {
-                                    "type" : "number"
-                                 },
+                                "fk_id_user": {
+                                    "type": "number"
+                                },
                                 "artist": {
                                     "type": "string"
                                 },
@@ -163,10 +175,13 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "OK",
+                        "description": "New vinyl create successfully",
                         "schema": {
                             "$ref": "#/definitions/Vinyl"
                         }
+                    },
+                    "400": {
+                        "description": "Error in database operation"
                     }
                 }
             }
@@ -196,9 +211,9 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "fk_id_user" : {
-                                    "type" : "number"
-                                 },
+                                "fk_id_user": {
+                                    "type": "number"
+                                },
                                 "artist": {
                                     "type": "string"
                                 },
@@ -217,16 +232,18 @@
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "OK",
+                    "200": {
+                        "description": "Vinyl updated successfully",
                         "schema": {
                             "$ref": "#/definitions/Vinyl"
                         }
+                    },
+                    "400": {
+                        "description": "Error in database operation"
                     }
                 }
             }
-        }
-        ,
+        },
         "/vinyl/delete/{id}": {
             "delete": {
                 "tags": [
@@ -249,9 +266,9 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "fk_id_user" : {
-                                    "type" : "number"
-                                 }
+                                "fk_id_user": {
+                                    "type": "number"
+                                }
                             }
                         }
                     }
@@ -259,17 +276,17 @@
                 "schema": {
                     "type": "object",
                     "properties": {
-                        "fk_id_user" : {
-                            "type" : "int"
-                         }
+                        "fk_id_user": {
+                            "type": "int"
+                        }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Vinyl"
-                        }
+                        "description": "Vinyl deleted successfully"
+                    },
+                    "400": {
+                        "description": "Error in database operation"
                     }
                 }
             }
@@ -290,9 +307,9 @@
                     "type": "integer",
                     "uniqueItems": true
                 },
-                "fk_id_user": { 
-                    "type" : "integer",
-                    "uniqueItems" : true
+                "fk_id_user": {
+                    "type": "integer",
+                    "uniqueItems": true
                 },
                 "artist": {
                     "type": "string"
@@ -304,6 +321,10 @@
                     "type": "string"
                 },
                 "release_date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "date_added": {
                     "type": "string",
                     "format": "date"
                 }
@@ -322,9 +343,9 @@
                     "type": "integer",
                     "uniqueItems": true
                 },
-                "username": { 
-                    "type" : "string",
-                    "uniqueItems" : true
+                "username": {
+                    "type": "string",
+                    "uniqueItems": true
                 },
                 "secret_password": {
                     "type": "string"
@@ -339,6 +360,5 @@
                 }
             }
         }
-
     }
 }

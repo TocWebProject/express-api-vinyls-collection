@@ -29,7 +29,7 @@ npm run start
 ```
 
 
-## Documentation détaillé de l'api via Swagger avec description des paramètres pour chaque route
+## Documentation détaillée de l'api via Swagger avec description des paramètres pour chaque route
 http://localhost:3000/api-docs/
 
 

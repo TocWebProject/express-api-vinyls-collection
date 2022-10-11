@@ -10,7 +10,7 @@ require('dotenv').config();
 
 
 /*
-// REGISTER & LOGIN
+// REGISTER & LOGIN SYSTEM
 */
 const userMiddleware = require('../middleware/users.js');
 
@@ -30,7 +30,6 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
                 // username is available
                 bcrypt.hash(password, 10, (err, hash) => {
                     if (err) {
-                        console.log("error from has");
                         return res.status(500).send({
                             msg: err
                         });
@@ -40,8 +39,6 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
                         connection.query(insertUserSql, [username, hash],
                             (err, result) => {
                                 if (err) {
-                                    console.log("error from insert Users : " + err.message);
-
                                     return result.status(400).send({
                                         msg: err
                                     });
@@ -93,7 +90,7 @@ router.post('/login', (req, res, next) => {
                     if (bResult) {
                         const token = jwt.sign({
                             username: result[0].username,
-                            userId: result[0].id
+                            userId: result[0].id_user
                         },
                             process.env.SECRET_JWT, {
                             expiresIn: '7d'
@@ -104,9 +101,6 @@ router.post('/login', (req, res, next) => {
                             sqlUpdateLastLogin, [result[0].id_user],
                             (err, result) => { 
                                 if (err) {
-                                    console.log("error from update last login : " + err.message);
-
-                                    //   throw err;
                                     return res.status(400).send({
                                         msg: err
                                     });
@@ -137,14 +131,11 @@ router.get('/vinyl/get/:id([0-9]+)', async (request, response) => {
     const fk_id_user = parseInt(request.params.id);
 
     const sql = 'SELECT * FROM vinyl WHERE fk_id_user = ? ;';
-
-
     connection.query(sql, fk_id_user, function (error, results) {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
             response.status(200).json(results);
-            console.log('Mes vinyls: ', results);
         }
     });
 });
@@ -157,7 +148,7 @@ router.post('/vinyl/create', async (request, response) => {
     const label = request.body.label;
     const release_date = request.body.release_date;
 
-    let sql = 'INSERT INTO vinyl (fk_id_user, artist, album, label, release_date) VALUES (?, ?, ? , ?, ?);'
+    let sql = 'INSERT INTO vinyl (fk_id_user, artist, album, label, release_date, date_added) VALUES (?, ?, ? , ?, ?, now());'
     connection.query(sql, [fk_id_user, artist, album, label, release_date], function (error, rows) {
         if (error) {
             response.status(400).send('Error in database operation');
@@ -183,8 +174,7 @@ router.put('/vinyl/update/:id([0-9]+)', async (request, response) => {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
-            console.log('Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' updated successfully');
-            response.status(201).json({
+            response.status(200).json({
                 message: 'Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' updated successfully!'
             });
         }
@@ -201,8 +191,7 @@ router.delete('/vinyl/delete/:id([0-9]+)', async (request, response) => {
         if (error) {
             response.status(400).send('Error in database operation');
         } else {
-            console.log('Vinyl ' + vinyl_id + ' deleted successfully');
-            response.status(201).json({
+            response.status(200).json({
                 message: 'Vinyl ' + vinyl_id + ' from user ' + fk_id_user + ' deleted successfully!'
             });
         }

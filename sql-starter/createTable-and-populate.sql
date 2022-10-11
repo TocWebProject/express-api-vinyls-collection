@@ -15,7 +15,8 @@ CREATE TABLE vinyl
     artist VARCHAR(100),
     album VARCHAR(100),
     label VARCHAR(255),
-    release_date DATE
+    release_date DATE,
+    date_added DATE,
 );
 
 INSERT INTO users
@@ -24,12 +25,13 @@ VALUES
     ('TheUser', '$2y$10$NUQmwwEIWOdMoxYlM4jUGOVzP8Oze6HB2wVtp7arwna4Ae5nPzTla','2022-10-29', '2022-10-29');
 
 INSERT INTO vinyl
-  (artist, album, label, release_date, FK_id_user)
+  (artist, album, label, release_date, FK_id_user, date_added)
 VALUES
-    ('Prince of denmark', 'V', 'Giegling', '2016-03-10', '1'),
-    ('Simo Cell', 'Club production', 'Temet', '2021-05-23', '1'),
-    ('Exal', 'Not to late', 'Faktice', '2022-03-13','1'),
-    ('Low jack', 'Yeah yo', 'Gravat', '2019-09-17', '1');
+    ('Prince of denmark', 'V', 'Giegling', '2016-03-10', '1', now()),
+    ('Simo Cell', 'Club production', 'Temet', '2021-05-23', '1', now()),
+    ('Exal', 'Not to late', 'Faktice', '2022-03-13','1', now()),
+    ('Low jack', 'Yeah yo', 'Gravat', '2019-09-17', '1', now());
+
 
 
 
