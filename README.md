@@ -33,10 +33,10 @@ npm run start
 http://localhost:3000/api-docs/
 
 
-## Routes Vinyles
+## Routes Vinyles protégées via jwt token decoded middleware
 
 #### Ensemble de la collection d'un user - Method GET 
-http://localhost:3000/vinyl/{id}
+http://localhost:3000/vinyl/get
 
 #### Ajouter un vinyl d'un user - Method POST 
 http://localhost:3000/vinyl/create/

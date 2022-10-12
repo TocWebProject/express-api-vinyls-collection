@@ -11,6 +11,14 @@
     },
     "host": "localhost:3000",
     "basePath": "/",
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+          }
+    },
     "tags": [
         {
             "name": "Vinyl",
@@ -110,25 +118,13 @@
                 }
             }
         },
-        "/vinyl/get/{id}": {
+        "/vinyl/get/": {
             "get": {
+                "security": [{ "Bearer": [] }],
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Get all vinyls from the user",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User Id",
-                        "schema": {
-                            "id": {
-                                "type": "number",
-                                "uniqueItems": true
-                            }
-                        }
-                    }
-                ],
+                "summary": "Get all vinyls from the user with his id in JWT token informations",
                 "responses": {
                     "200": {
                         "description": "All vinyls from the user"
@@ -141,10 +137,11 @@
         },
         "/vinyl/create/": {
             "post": {
+                "security": [{ "Bearer": [] }],
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Adding one vinyl from the user",
+                "summary": "Adding one vinyl from the user with his id in JWT token informations",
                 "parameters": [
                     {
                         "name": "vinyl",
@@ -153,9 +150,6 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "fk_id_user": {
-                                    "type": "number"
-                                },
                                 "artist": {
                                     "type": "string"
                                 },
@@ -188,10 +182,11 @@
         },
         "/vinyl/update/{id}": {
             "put": {
+                "security": [{ "Bearer": [] }],
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Update one vinyl with this id in path & fk_id_user in body",
+                "summary": "Update one vinyl with this id in path & User id in JWT token informations",
                 "parameters": [
                     {
                         "name": "id",
@@ -211,9 +206,6 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "fk_id_user": {
-                                    "type": "number"
-                                },
                                 "artist": {
                                     "type": "string"
                                 },
@@ -246,10 +238,11 @@
         },
         "/vinyl/delete/{id}": {
             "delete": {
+                "security": [{ "Bearer": [] }],
                 "tags": [
                     "Vinyl"
                 ],
-                "summary": "Delete one vinyl with this id in the path and fk_id_user in body",
+                "summary": "Delete one vinyl with this id in the path & User id in JWT token informations",
                 "parameters": [
                     {
                         "name": "id",
@@ -257,19 +250,6 @@
                         "description": "Vinyl we want to delete",
                         "schema": {
                             "$ref": "#/definitions/Vinyl"
-                        }
-                    },
-                    {
-                        "name": "fk_id_user",
-                        "in": "body",
-                        "description": "The foreign key id fom the user",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "fk_id_user": {
-                                    "type": "number"
-                                }
-                            }
                         }
                     }
                 ],

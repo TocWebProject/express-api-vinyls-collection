@@ -10,27 +10,29 @@ require('dotenv').config();
 
 
 /*
-// REGISTER & LOGIN SYSTEM
+* ---------------------------------------------------------------
+* REGISTER & LOGIN SYSTEM
+* ---------------------------------------------------------------
 */
 const userMiddleware = require('../middleware/users.js');
 
-router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
+router.post('/sign-up', userMiddleware.validateRegister, (request, response, next) => {
 
-    let username = req.body.username;
-    let password = req.body.password;
+    let username = request.body.username;
+    let password = request.body.password;
 
     let firstSql = "SELECT * FROM users WHERE LOWER(username) = ? ;";
     connection.query(firstSql, username.toLowerCase(),
         (err, result) => {
             if (result.length > 0) {
-                return res.status(409).send({
+                return response.status(409).send({
                     msg: 'This username is already in use!'
                 });
             } else {
                 // username is available
                 bcrypt.hash(password, 10, (err, hash) => {
                     if (err) {
-                        return res.status(500).send({
+                        return response.status(500).send({
                             msg: err
                         });
                     } else {
@@ -43,7 +45,7 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
                                         msg: err
                                     });
                                 }
-                                return res.status(201).send({
+                                return response.status(201).send({
                                     msg: 'Registered!'
                                 });
                             }
@@ -55,9 +57,9 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
     );
 });
 
-router.post('/login', (req, res, next) => {
-    let username = req.body.username;
-    let password = req.body.password;
+router.post('/login', (request, response, next) => {
+    let username = request.body.username;
+    let password = request.body.password;
 
     let sql = 'SELECT * FROM users WHERE username = ? ;'
     connection.query(
@@ -66,12 +68,12 @@ router.post('/login', (req, res, next) => {
             // user does not exists
             if (err) {
                 //   throw err;
-                return res.status(400).send({
+                return response.status(400).send({
                     msg: err
                 });
             }
             if (!result.length) {
-                return res.status(401).send({
+                return response.status(401).send({
                     msg: 'Username or password is incorrect!'
                 });
             }
@@ -83,7 +85,7 @@ router.post('/login', (req, res, next) => {
                     // wrong password
                     if (bErr) {
                         //   throw bErr;
-                        return res.status(401).send({
+                        return response.status(401).send({
                             msg: 'Username or password is incorrect!'
                         });
                     }
@@ -101,19 +103,19 @@ router.post('/login', (req, res, next) => {
                             sqlUpdateLastLogin, [result[0].id_user],
                             (err, result) => { 
                                 if (err) {
-                                    return res.status(400).send({
+                                    return response.status(400).send({
                                         msg: err
                                     });
                                 }
                             }
                         );
-                        return res.status(200).send({
+                        return response.status(200).send({
                             msg: 'Logged in!',
                             token,
                             user: result[0]
                         });
                     }
-                    return res.status(401).send({
+                    return response.status(401).send({
                         msg: 'Username or password is incorrect!'
                     });
                 }
@@ -124,11 +126,14 @@ router.post('/login', (req, res, next) => {
 
 
 /*
-* VINYLS CRUD FOR EACH UNIQUE USER
+* ---------------------------------------------------------------
+* VINYLS CRUD FOR EACH UNIQUE USER 
+* Protected by isLoggedIn middleware
+* ---------------------------------------------------------------
 */
-router.get('/vinyl/get/:id([0-9]+)', async (request, response) => {
-
-    const fk_id_user = parseInt(request.params.id);
+router.get('/vinyl/get', userMiddleware.isLoggedIn, async (request, response) => {
+    // Decoded token user info with middleware check
+    const fk_id_user = request.userData.userId;
 
     const sql = 'SELECT * FROM vinyl WHERE fk_id_user = ? ;';
     connection.query(sql, fk_id_user, function (error, results) {
@@ -141,8 +146,11 @@ router.get('/vinyl/get/:id([0-9]+)', async (request, response) => {
 });
 
 
-router.post('/vinyl/create', async (request, response) => {
-    const fk_id_user = request.body.fk_id_user;
+router.post('/vinyl/create', userMiddleware.isLoggedIn, async (request, response) => {
+
+    // Decoded token user info with middle check
+    const fk_id_user = request.userData.userId;
+    // Body data 
     const artist = request.body.artist;
     const album = request.body.album;
     const label = request.body.label;
@@ -160,9 +168,11 @@ router.post('/vinyl/create', async (request, response) => {
     });
 });
 
-router.put('/vinyl/update/:id([0-9]+)', async (request, response) => {
+router.put('/vinyl/update/:id([0-9]+)', userMiddleware.isLoggedIn, async (request, response) => {
+    // Decoded token user info with middle check
+    const fk_id_user = request.userData.userId;
+    // Path & Body data 
     const vinyl_id = parseInt(request.params.id);
-    const fk_id_user = request.body.fk_id_user;
     const artist = request.body.artist;
     const album = request.body.album;
     const label = request.body.label;
@@ -181,9 +191,11 @@ router.put('/vinyl/update/:id([0-9]+)', async (request, response) => {
     });
 })
 
-router.delete('/vinyl/delete/:id([0-9]+)', async (request, response) => {
+router.delete('/vinyl/delete/:id([0-9]+)', userMiddleware.isLoggedIn, async (request, response) => {
+    // Decoded token user info with middle checkdleware
+    const fk_id_user = request.userData.userId;
+    // Path info 
     const vinyl_id = parseInt(request.params.id);
-    const fk_id_user = request.body.fk_id_user;
 
     const sql = 'DELETE FROM vinyl WHERE id = ? AND fk_id_user = ?;';
 
